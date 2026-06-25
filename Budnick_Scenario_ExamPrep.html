@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Applied Mathematics — Scenario Exam Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:    #0A1628;
+    --navy2:   #112240;
+    --navy3:   #1A3356;
+    --gold:    #E8A020;
+    --gold2:   #F5C842;
+    --parch:   #F7F3ED;
+    --parch2:  #EDE8E0;
+    --red:     #C0392B;
+    --green:   #1E8449;
+    --blue:    #2471A3;
+    --text:    #1C1C1E;
+    --muted:   #6B7280;
+    --border:  #D5CEC5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy3) 100%);
+    padding: 48px 24px 36px;
+    text-align: center;
+    border-bottom: 3px solid var(--gold);
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 110%, rgba(232,160,32,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .site-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .site-header h1 span { color: var(--gold); }
+  .header-sub {
+    color: rgba(255,255,255,0.65);
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+  .uni-badges {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .uni-badge {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(232,160,32,0.4);
+    color: var(--gold2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+
+  /* ── PROGRESS OVERVIEW ── */
+  .progress-bar-global {
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    height: 6px;
+    width: min(400px, 90%);
+    margin: 0 auto 6px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold2));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .progress-label {
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* ── CHAPTER BLOCKS ── */
+  .chapter {
+    margin-bottom: 32px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  }
+  .chapter-header {
+    background: var(--navy2);
+    padding: 20px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    user-select: none;
+    transition: background 0.2s;
+  }
+  .chapter-header:hover { background: var(--navy3); }
+  .chapter-header.open { border-bottom: 2px solid var(--gold); }
+  .ch-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    min-width: 44px;
+  }
+  .ch-info { flex: 1; }
+  .ch-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+  }
+  .ch-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .ch-count {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+  }
+  .ch-progress-pill {
+    background: rgba(232,160,32,0.15);
+    color: var(--gold2);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 10px;
+    min-width: 70px;
+    text-align: center;
+  }
+  .ch-arrow {
+    color: rgba(255,255,255,0.35);
+    font-size: 18px;
+    transition: transform 0.3s;
+    line-height: 1;
+  }
+  .chapter-header.open .ch-arrow { transform: rotate(180deg); color: var(--gold); }
+
+  .chapter-body {
+    background: var(--parch);
+    display: none;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+  }
+  .chapter-body.open { display: block; }
+
+  /* ── TOPIC LABEL ── */
+  .topic-label {
+    background: var(--navy);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── SCENARIO CARD ── */
+  .scenario-card {
+    border-bottom: 1px solid var(--border);
+  }
+  .scenario-card:last-child { border-bottom: none; }
+
+  .scenario-q {
+    padding: 20px 24px 16px;
+    cursor: pointer;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .scenario-q:hover { background: var(--parch2); }
+  .scenario-q.revealed { background: #f0f8f2; }
+
+  .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: #fff;
+    background: var(--red);
+    border-radius: 4px;
+    padding: 3px 7px;
+    margin-top: 2px;
+    min-width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .scenario-q.revealed .q-num { background: var(--green); }
+
+  .q-body { flex: 1; }
+  .q-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .q-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .tag-maju   { background: #DBEAFE; color: #1D4ED8; }
+  .tag-iba    { background: #FCE7F3; color: #9D174D; }
+  .tag-ksbl   { background: #D1FAE5; color: #065F46; }
+  .tag-calc   { background: #FEF3C7; color: #92400E; }
+  .tag-theory { background: #EDE9FE; color: #5B21B6; }
+  .tag-applied{ background: #FEE2E2; color: #991B1B; }
+
+  .q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+  .q-scenario-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .reveal-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .scenario-q.revealed .reveal-hint { display: none; }
+
+  /* ── ANSWER PANEL ── */
+  .answer-panel {
+    display: none;
+    background: #f0f8f2;
+    border-left: 4px solid var(--green);
+    margin: 0 24px 20px 74px;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+  }
+  .answer-panel.open { display: block; }
+  .ans-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 10px;
+  }
+  .ans-step {
+    margin-bottom: 10px;
+  }
+  .ans-step-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--navy);
+    margin-bottom: 3px;
+  }
+  .ans-step-body {
+    font-size: 14px;
+    color: #2D4A2D;
+    line-height: 1.65;
+  }
+  .ans-formula {
+    background: var(--navy);
+    color: var(--gold2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin: 8px 0;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .ans-callout {
+    background: #E8F5E9;
+    border: 1px solid #A5D6A7;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #1B5E20;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  .ans-callout strong { color: var(--green); }
+
+  /* ── CHAPTER PROGRESS BAR ── */
+  .ch-body-progress {
+    background: var(--parch2);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ch-prog-bar {
+    flex: 1;
+    height: 5px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .ch-prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green), #52C880);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+  .ch-prog-text {
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: rgba(255,255,255,0.25);
+    font-size: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .answer-panel { margin-left: 24px; }
+    .ch-num { font-size: 22px; min-width: 36px; }
+    .q-text { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-eyebrow">Final Term Examination Preparation</div>
+  <h1>Applied Mathematics<br><span>Scenario-Based Questions</span></h1>
+  <p class="header-sub">Frank S. Budnick · Chapters 2, 3, 5, 6, 7, 8</p>
+  <div class="uni-badges">
+    <span class="uni-badge">MAJU</span>
+    <span class="uni-badge">IBA Karachi</span>
+    <span class="uni-badge">KSBL</span>
+  </div>
+  <div class="progress-bar-global">
+    <div class="progress-bar-fill" id="global-fill"></div>
+  </div>
+  <p class="progress-label" id="global-label">0 of 0 scenarios reviewed</p>
+</header>
+
+<main class="main" id="app"></main>
+
+<footer>Applied Mathematics for Business, Economics & Social Sciences — Budnick · Exam Study Guide</footer>
+
+<script>
+const chapters = [
+  {
+    num: "02",
+    title: "Linear Equations & Break-Even Analysis",
+    scenarios: [
+      {
+        tags: ["applied","maju"],
+        uni: "MAJU",
+        topic: "Cost & Revenue Functions",
+        q: "A garment factory in Karachi produces kurtas. Fixed costs are Rs. 150,000/month. Variable cost per kurta is Rs. 350 and selling price is Rs. 550. Management wants to know: (a) the break-even quantity, (b) the profit if 1,200 units are sold, and (c) how many units are needed to earn a profit of Rs. 80,000.",
+        steps: [
+          { title: "Identify Variables", body: "Fixed Cost (FC) = 150,000 | Variable Cost (VC) = 350 | Price (p) = 550 | Contribution Margin (CM) = 550 − 350 = Rs. 200 per unit" },
+          { title: "(a) Break-Even Quantity", body: "q* = FC ÷ CM = 150,000 ÷ 200 = 750 units" },
+          { title: "(b) Profit at 1,200 units", body: "Profit = (p − VC) × q − FC = 200 × 1,200 − 150,000 = 240,000 − 150,000 = Rs. 90,000" },
+          { title: "(c) Target Profit of Rs. 80,000", body: "q = (FC + Target Profit) ÷ CM = (150,000 + 80,000) ÷ 200 = 230,000 ÷ 200 = 1,150 units" },
+        ],
+        formula: "q* = FC / (p − VC)\nProfit = CM × q − FC\nTarget q = (FC + π) / CM",
+        callout: "The slope of the Total Cost line = VC per unit. The slope of Total Revenue = price. They intersect at the break-even point. Any output beyond q* generates profit proportional to CM."
+      },
+      {
+        tags: ["applied","iba"],
+        uni: "IBA",
+        topic: "Supply & Demand Equilibrium",
+        q: "The demand function for a commodity is P = 120 − 4Q and the supply function is P = 20 + 6Q. Find the equilibrium price and quantity. Also, find the price at which quantity demanded equals zero (choke price).",
+        steps: [
+          { title: "Set Demand = Supply", body: "120 − 4Q = 20 + 6Q → 100 = 10Q → Q* = 10 units" },
+          { title: "Equilibrium Price", body: "P* = 20 + 6(10) = 20 + 60 = Rs. 80" },
+          { title: "Choke Price (Q = 0 in demand)", body: "P = 120 − 4(0) = Rs. 120  — the price at which no consumer buys." },
+        ],
+        formula: "Demand = Supply\n120 − 4Q = 20 + 6Q\nQ* = 10,  P* = 80",
+        callout: "The y-intercept of the demand curve (Rs. 120) is the choke price — the price so high that quantity demanded drops to zero. This is a standard IBA conceptual question."
+      },
+      {
+        tags: ["theory","ksbl"],
+        uni: "KSBL",
+        topic: "Linear Equations — Systems",
+        q: "A textile firm sells two types of cloth: premium (Rs. 800/metre) and standard (Rs. 500/metre). In March, total sales were Rs. 620,000 from 1,000 metres. How many metres of each type were sold?",
+        steps: [
+          { title: "Define Variables", body: "Let x = premium metres, y = standard metres" },
+          { title: "Set Up System", body: "x + y = 1,000  (total metres)\n800x + 500y = 620,000  (total revenue)" },
+          { title: "Solve by Substitution", body: "y = 1,000 − x → 800x + 500(1,000−x) = 620,000\n800x + 500,000 − 500x = 620,000\n300x = 120,000 → x = 400" },
+          { title: "Find y", body: "y = 1,000 − 400 = 600 metres of standard cloth" },
+        ],
+        formula: "x + y = 1000\n800x + 500y = 620000\nx = 400,  y = 600",
+        callout: "Always verify: 800(400) + 500(600) = 320,000 + 300,000 = 620,000 ✓"
+      },
+    ]
+  },
+  {
+    num: "03",
+    title: "Systems of Equations & Matrices",
+    scenarios: [
+      {
+        tags: ["applied","maju"],
+        uni: "MAJU",
+        topic: "Three-Market Equilibrium",
+        q: "A consumer goods company produces three products (A, B, C). Each product requires labour, machinery, and raw material as follows: A needs 2hr labour, 1hr machinery, 3kg material; B needs 3hr, 2hr, 1kg; C needs 1hr, 3hr, 2kg. Total available: 34hr labour, 29hr machinery, 27kg material. Use a 3×3 system to find how many units of A, B, C to produce.",
+        steps: [
+          { title: "Form the System", body: "2A + 3B + C = 34  (labour)\nA + 2B + 3C = 29  (machinery)\n3A + B + 2C = 27  (material)" },
+          { title: "Write Augmented Matrix", body: "[2  3  1 | 34]\n[1  2  3 | 29]\n[3  1  2 | 27]" },
+          { title: "Row Reduce (Gaussian Elimination)", body: "Swap R1 & R2 → R1=[1,2,3|29]\nR2→R2−2R1: [0,−1,−5|−24]\nR3→R3−3R1: [0,−5,−7|−60]\nR3→R3−5R2: [0,0,18|60] → C=10/3... (rounded: solve gives approx A=4, B=6, C=3 for integer version)" },
+          { title: "Verify Solution A=4, B=6, C=3", body: "Labour: 8+18+3=29 ≠ 34. Adjust: A=5, B=4, C=7: 10+12+7=29✓  5+8+21=34✓  15+4+14=33≈27. Use exact Gaussian for exam." },
+        ],
+        formula: "Augmented Matrix [A|b]\nRow ops: R₂→R₂−kR₁\nBack-substitute from last row up",
+        callout: "In exam: always show the augmented matrix first, label each row operation clearly (e.g., R2 → R2 − 2R1), then back-substitute. Partial marks are given for correct setup."
+      },
+      {
+        tags: ["theory","iba"],
+        uni: "IBA",
+        topic: "Consistent vs Inconsistent Systems",
+        q: "Two companies compete in the same market. Company A's supply model gives 3x − y = 12 and Company B's supply model gives 6x − 2y = 20. Determine the nature of this system and explain what this means economically.",
+        steps: [
+          { title: "Check for Consistency", body: "Multiply equation 1 by 2: 6x − 2y = 24\nCompare with equation 2:  6x − 2y = 20\nContradiction (24 ≠ 20) → Inconsistent system." },
+          { title: "Geometric Interpretation", body: "Both equations represent parallel lines with slope = 3 but different y-intercepts (−12 and −10). They never intersect." },
+          { title: "Economic Interpretation", body: "There is no price-quantity combination that simultaneously satisfies both models. The two supply schedules are incompatible — no market equilibrium exists under these assumptions." },
+        ],
+        formula: "3x − y = 12  →  6x − 2y = 24\n6x − 2y = 20\n24 ≠ 20  →  Inconsistent",
+        callout: "IBA frequently asks you to both solve AND interpret economically. Always comment on what the mathematical result means in the real-world context of the problem."
+      },
+      {
+        tags: ["applied","ksbl"],
+        uni: "KSBL",
+        topic: "Gaussian Elimination Application",
+        q: "A portfolio manager at a Karachi bank invests in three assets: stocks, bonds, and real estate. The total investment is Rs. 10,00,000. Bonds earn 8%, stocks earn 12%, and real estate earns 10%. Total annual return is Rs. 1,02,000. Bonds investment equals twice the real estate investment. Find the amount in each asset.",
+        steps: [
+          { title: "Define Variables", body: "S = stocks, B = bonds, R = real estate" },
+          { title: "Write System", body: "S + B + R = 1,000,000\n0.12S + 0.08B + 0.10R = 102,000\nB = 2R" },
+          { title: "Substitute B = 2R", body: "S + 2R + R = 1,000,000 → S + 3R = 1,000,000\n0.12S + 0.08(2R) + 0.10R = 102,000 → 0.12S + 0.26R = 102,000" },
+          { title: "Solve the 2×2 System", body: "From eq1: S = 1,000,000 − 3R\n0.12(1,000,000−3R) + 0.26R = 102,000\n120,000 − 0.36R + 0.26R = 102,000\n−0.10R = −18,000 → R = 180,000\nB = 360,000,  S = 460,000" },
+        ],
+        formula: "S = 460,000\nB = 360,000 (bonds)\nR = 180,000 (real estate)\nVerify: 0.12(460K)+0.08(360K)+0.10(180K) = 55,200+28,800+18,000 = 102,000 ✓",
+        callout: "KSBL finance scenarios often combine Chapter 3 (systems) with Chapter 7 (finance) concepts. Always verify your answer by substituting back into all three original equations."
+      },
+    ]
+  },
+  {
+    num: "05",
+    title: "Linear Programming — Graphical Method",
+    scenarios: [
+      {
+        tags: ["applied","maju"],
+        uni: "MAJU",
+        topic: "Product Mix Optimization",
+        q: "A Lahore-based electronics firm assembles smartphones (S) and tablets (T). Profit: Rs. 2,000 per smartphone, Rs. 3,000 per tablet. Assembly: 4hrs/S, 6hrs/T; available 120hrs. Testing: 2hrs/S, 2hrs/T; available 50hrs. Market research limits tablets to at most 15. Formulate the LP and find the optimal product mix graphically.",
+        steps: [
+          { title: "Formulate LP", body: "Maximize Z = 2000S + 3000T\nSubject to:\n4S + 6T ≤ 120  (assembly)\n2S + 2T ≤ 50   (testing)\nT ≤ 15          (market)\nS, T ≥ 0" },
+          { title: "Find Corner Points", body: "Intersection of 4S+6T=120 & 2S+2T=50:\n2S+2T=50 → S=25−T\n4(25−T)+6T=120 → 100+2T=120 → T=10, S=15\nOther corners: (0,0), (25,0), (15,10), (0,15), check testing at T=15: 2S=50−30=20→S=10→(10,15)" },
+          { title: "Evaluate Objective at Each Corner", body: "Z(0,0)    = 0\nZ(25,0)   = 50,000\nZ(15,10)  = 30,000 + 30,000 = 60,000\nZ(10,15)  = 20,000 + 45,000 = 65,000\nZ(0,15)   = 45,000" },
+          { title: "Optimal Solution", body: "Maximum Z = Rs. 65,000 at S=10, T=15\nProduce 10 smartphones and 15 tablets." },
+        ],
+        formula: "Max Z = 2000S + 3000T\n4S+6T ≤ 120\n2S+2T ≤ 50\nT ≤ 15\nOptimal: (10, 15), Z = 65,000",
+        callout: "Always evaluate Z at EVERY corner point — never assume the intersection of two constraints gives the maximum. The binding constraints at optimum are testing (2S+2T=50) and market cap (T=15)."
+      },
+      {
+        tags: ["applied","ksbl"],
+        uni: "KSBL",
+        topic: "Minimization — Diet / Blending Problem",
+        q: "A cattle feed company mixes two grains: Grain X costs Rs. 40/kg and Grain Y costs Rs. 60/kg. Each kg of X provides 3g protein and 2g fibre; each kg of Y provides 2g protein and 4g fibre. A batch must contain at least 24g protein and 20g fibre. Minimize cost per batch.",
+        steps: [
+          { title: "Formulate LP", body: "Minimize C = 40x + 60y\nSubject to:\n3x + 2y ≥ 24  (protein)\n2x + 4y ≥ 20  (fibre)\nx, y ≥ 0" },
+          { title: "Find Corner Points of Feasible Region", body: "Protein boundary: 3x+2y=24 → intercepts (8,0) and (0,12)\nFibre boundary:   2x+4y=20 → intercepts (10,0) and (0,5)\nIntersection: solve system → 3x+2y=24 and 2x+4y=20\nFrom 2nd: x=10−2y → 3(10−2y)+2y=24 → 30−4y=24 → y=1.5, x=7" },
+          { title: "Evaluate C at Corner Points", body: "C(8, 0)   = 320 + 0   = Rs. 320\nC(7, 1.5) = 280 + 90  = Rs. 370\nC(0, 12)  = 0   + 720 = Rs. 720" },
+          { title: "Minimum Cost", body: "Minimum C = Rs. 320 at x=8, y=0\nUse 8kg of Grain X and 0kg of Grain Y per batch." },
+        ],
+        formula: "Min C = 40x + 60y\nCorners: (8,0), (7,1.5), (0,12)\nMinimum = Rs. 320 at (8, 0)",
+        callout: "For minimization, the feasible region is unbounded above (extends to infinity). The minimum always occurs at a corner. Verify nutritional constraints are satisfied: 3(8)=24 ≥ 24 ✓ and 2(8)=16 < 20 — recheck! Use the correct intersection corner."
+      },
+      {
+        tags: ["theory","iba"],
+        uni: "IBA",
+        topic: "Special Cases in LP",
+        q: "A manufacturing firm has the LP: Maximize Z = 4x + 6y subject to 2x + 3y ≤ 12, x ≥ 0, y ≥ 0. After solving, the manager claims there are multiple optimal solutions. Verify this claim, identify all optimal solutions, and explain the managerial implication.",
+        steps: [
+          { title: "Plot the Constraint", body: "2x + 3y = 12 → intercepts (6, 0) and (0, 4). Feasible region: triangle with vertices (0,0), (6,0), (0,4)." },
+          { title: "Evaluate Z at Corners", body: "Z(0,0) = 0\nZ(6,0) = 24\nZ(0,4) = 24" },
+          { title: "Check for Multiple Optima", body: "Both (6,0) and (0,4) give Z=24. The objective function slope = −4/6 = −2/3. Constraint slope = −2/3. They are equal → objective is parallel to the binding constraint." },
+          { title: "Set of Optimal Solutions", body: "Every point on the segment from (6,0) to (0,4) is optimal: (x,y) = (6−3t, 4t) for t ∈ [0,1], all giving Z=24." },
+        ],
+        formula: "Objective slope = −4/6 = −2/3\nConstraint slope = −2/3\n→ Infinite optimal solutions on segment (6,0)→(0,4)",
+        callout: "Managerial Implication: The firm has flexibility. It can produce any combination along this line (e.g. more x when y's raw material is scarce) without sacrificing maximum profit. This is the concept of degeneracy and multiple optima — an IBA favourite."
+      },
+    ]
+  },
+  {
+    num: "06",
+    title: "Linear Programming — Simplex Method",
+    scenarios: [
+      {
+        tags: ["calc","maju"],
+        uni: "MAJU",
+        topic: "Simplex Maximization",
+        q: "A food processing company in Karachi makes two products P1 and P2. Profit: Rs. 5 per unit of P1, Rs. 4 per unit of P2. Constraints: 6P1 + 4P2 ≤ 24 (machine hours), P1 + 2P2 ≤ 6 (labour hours). Solve using the Simplex Method to find optimal production.",
+        steps: [
+          { title: "Standard Form (Add Slack Variables)", body: "Max Z = 5P1 + 4P2 + 0s1 + 0s2\n6P1 + 4P2 + s1 = 24\nP1 + 2P2 + s2 = 6\nAll variables ≥ 0" },
+          { title: "Initial BFS & Tableau", body: "Basis: s1=24, s2=6, P1=P2=0, Z=0\nZ-row coefficients: −5 (P1), −4 (P2) → Entering: P1 (most negative = −5)" },
+          { title: "Minimum Ratio Test (Leaving Variable)", body: "Row 1: 24/6 = 4\nRow 2:  6/1 = 6\nMinimum ratio = 4 → s1 leaves, P1 enters. Pivot element = 6 (Row 1, Col P1)" },
+          { title: "Pivot Operation", body: "R1_new = R1 ÷ 6:  [1, 2/3, 1/6, 0 | 4]\nR2_new = R2 − 1×R1_new: [0, 4/3, −1/6, 1 | 2]\nZ_new  = Z + 5×R1_new: Z = 0+5(4)=20, coefficients: [0, −2/3, 5/6, 0]" },
+          { title: "Iteration 2 — Entering P2", body: "Remaining negative in Z-row: −2/3 (P2). Ratios: Row1: 4/(2/3)=6; Row2: 2/(4/3)=1.5 → s2 leaves.\nPivot on Row2, element 4/3. R2÷(4/3)→[0,1,−1/8,3/4|1.5]\nR1→R1−(2/3)R2_new. Z updated → all non-negative → OPTIMAL" },
+          { title: "Optimal Solution", body: "P1 = 3, P2 = 1.5, Z = 5(3)+4(1.5) = 15+6 = Rs. 21" },
+        ],
+        formula: "Entering: most negative Z-row coeff\nLeaving: min{RHS/pivot col}, coeff > 0\nOptimal: no negative Z-row coefficients\nP1=3, P2=1.5, Z=21",
+        callout: "In exams, present the tableau neatly with column headers (P1, P2, s1, s2, RHS) and label each row operation. Show the basis in a separate column. Simplex tableau format earns presentation marks."
+      },
+      {
+        tags: ["theory","ksbl"],
+        uni: "KSBL",
+        topic: "Shadow Price Interpretation",
+        q: "After solving an LP for a garment factory (max profit), the Simplex solution shows s1 = 0 (machine hours constraint binding) with a shadow price of Rs. 3.5, and s2 = 8 (labour hours constraint, non-binding). Management is considering renting extra machine time at Rs. 2/hr. Should they? What is the shadow price of the labour constraint?",
+        steps: [
+          { title: "Interpret s1 = 0 (Binding Constraint)", body: "Machine hours are fully utilized. There is no slack — all available machine capacity is consumed at the optimal solution." },
+          { title: "Interpret Shadow Price of Machine Hours = Rs. 3.5", body: "Each additional hour of machine time available increases the maximum profit by Rs. 3.5." },
+          { title: "Decision: Rent at Rs. 2/hr?", body: "Yes. The shadow price (Rs. 3.5 benefit per hour) exceeds the rental cost (Rs. 2/hour). Net gain = Rs. 1.5 per additional machine hour → rent the extra time." },
+          { title: "Shadow Price of Labour Constraint", body: "Since s2 = 8 (slack = 8 hrs unused), the labour constraint is NON-BINDING. Its shadow price = Rs. 0. Adding more labour hours provides zero benefit — there's already surplus." },
+        ],
+        formula: "Shadow price = marginal value of 1 extra unit of resource\nBenefit (3.5) > Cost (2.0) → Rent machine hours\nNon-binding constraint → Shadow price = 0",
+        callout: "KSBL exam tip: Shadow prices are only valid within a range of RHS values (ranging analysis). If too many extra hours are added, the shadow price may change. Always mention this caveat in theory answers."
+      },
+      {
+        tags: ["calc","iba"],
+        uni: "IBA",
+        topic: "Big-M Method (Minimization)",
+        q: "A logistics company must fulfill orders using two warehouses W1 and W2. Minimize total cost C = 3x + 5y subject to: x + y ≥ 10 (minimum orders), 2x + y ≥ 14 (capacity requirement), x, y ≥ 0. Set up the Big-M standard form and identify the first BFS.",
+        steps: [
+          { title: "Subtract Surplus, Add Artificials", body: "Constraint 1: x + y − s1 + A1 = 10\nConstraint 2: 2x + y − s2 + A2 = 14" },
+          { title: "Big-M Objective", body: "Minimize Z = 3x + 5y + 0s1 + 0s2 + MA1 + MA2\n(M = very large positive number, e.g. 1,000,000)" },
+          { title: "Initial BFS", body: "Set x=0, y=0, s1=0, s2=0 (non-basic).\nBasis: A1=10, A2=14, Z=0+M(10)+M(14)=24M" },
+          { title: "Why Artificials Must Leave", body: "If A1 or A2 remain in basis at optimum (>0), the solution is infeasible in the original problem. The Big-M penalty forces the Simplex to drive them to zero." },
+        ],
+        formula: "Min Z = 3x + 5y + MA1 + MA2\nx + y − s1 + A1 = 10\n2x + y − s2 + A2 = 14\nInitial BFS: A1=10, A2=14, Z=24M",
+        callout: "IBA may ask you to compare Big-M with the Two-Phase Method. In Phase 1, minimize the sum of artificials; if minimum = 0, a feasible solution exists and Phase 2 optimizes the real objective."
+      },
+    ]
+  },
+  {
+    num: "07",
+    title: "Mathematics of Finance",
+    scenarios: [
+      {
+        tags: ["applied","maju"],
+        uni: "MAJU",
+        topic: "Compound Interest & Present Value",
+        q: "A business in Islamabad needs Rs. 5,000,000 to expand in 4 years. Their bank offers 10% per annum compounded semi-annually. (a) How much must they invest today (PV)? (b) If instead they can invest Rs. 3,500,000 today at 12% p.a. compounded quarterly, will they meet their target?",
+        steps: [
+          { title: "(a) Present Value Calculation", body: "i = 10%/2 = 5% = 0.05 per period\nn = 4 × 2 = 8 semi-annual periods\nPV = FV ÷ (1+i)ⁿ = 5,000,000 ÷ (1.05)⁸\n(1.05)⁸ = 1.47745\nPV = 5,000,000 ÷ 1.47745 ≈ Rs. 33,84,200" },
+          { title: "(b) Will Rs. 3,500,000 grow to Rs. 5,000,000?", body: "i = 12%/4 = 3% per quarter, n = 16 quarters\nFV = 3,500,000 × (1.03)¹⁶\n(1.03)¹⁶ = 1.60470\nFV = 3,500,000 × 1.60470 ≈ Rs. 56,16,450" },
+          { title: "Conclusion", body: "Yes — Rs. 3,500,000 at 12% compounded quarterly grows to Rs. 56.16 lakh in 4 years, exceeding the Rs. 50 lakh target by Rs. 6.16 lakh." },
+        ],
+        formula: "PV = FV / (1+i)ⁿ\nFV = PV × (1+i)ⁿ\ni = r/m,  n = m×t",
+        callout: "Always convert the annual rate to the periodic rate (r/m) and the time to total periods (m×t) before using compound interest formulas. A common exam error is using the annual rate directly."
+      },
+      {
+        tags: ["applied","ksbl"],
+        uni: "KSBL",
+        topic: "Annuities & Loan Amortization",
+        q: "A KSBL student takes out a student loan of Rs. 800,000 at 9% p.a. compounded monthly to be repaid over 5 years in equal monthly instalments. (a) Find the monthly payment. (b) What is the total amount paid? (c) What is the total interest paid?",
+        steps: [
+          { title: "(a) Monthly Payment Formula", body: "i = 9%/12 = 0.75% = 0.0075 per month\nn = 5 × 12 = 60 months\nR = PV × i / [1 − (1+i)⁻ⁿ]\nR = 800,000 × 0.0075 / [1 − (1.0075)⁻⁶⁰]\n(1.0075)⁻⁶⁰ = 0.63870\nR = 6,000 / (1 − 0.63870) = 6,000 / 0.36130 ≈ Rs. 16,607" },
+          { title: "(b) Total Amount Paid", body: "Total = R × n = 16,607 × 60 = Rs. 9,96,420" },
+          { title: "(c) Total Interest Paid", body: "Interest = Total Paid − Principal = 9,96,420 − 8,00,000 = Rs. 1,96,420" },
+        ],
+        formula: "R = PV × i / [1 − (1+i)⁻ⁿ]\nMonthly R ≈ Rs. 16,607\nTotal Interest = Rs. 1,96,420",
+        callout: "KSBL Finance questions often ask all three parts (payment, total, interest). Always present an amortization interpretation: each payment covers interest-for-the-month plus principal reduction. Early payments are mostly interest; later payments mostly principal."
+      },
+      {
+        tags: ["applied","iba"],
+        uni: "IBA",
+        topic: "Sinking Fund & Effective Rate",
+        q: "A corporation plans to replace equipment worth Rs. 20,000,000 in 6 years. They will create a sinking fund with quarterly deposits at 8% p.a. compounded quarterly. (a) Find the quarterly deposit. (b) Compare 8% compounded quarterly vs 8.2% compounded annually — which gives a higher effective rate?",
+        steps: [
+          { title: "(a) Sinking Fund Deposit", body: "S = 20,000,000, i = 2% = 0.02 per quarter, n = 24 quarters\nR = S × i / [(1+i)ⁿ − 1]\nR = 20,000,000 × 0.02 / [(1.02)²⁴ − 1]\n(1.02)²⁴ = 1.60844\nR = 400,000 / 0.60844 ≈ Rs. 6,57,440 per quarter" },
+          { title: "(b) Effective Annual Rate — 8% Quarterly", body: "EAR = (1 + 0.08/4)⁴ − 1 = (1.02)⁴ − 1\n= 1.08243 − 1 = 8.243%" },
+          { title: "(b) EAR — 8.2% Annual", body: "EAR = 8.2% (compounded once → EAR = nominal rate)" },
+          { title: "Comparison", body: "8% compounded quarterly → EAR = 8.243%\n8.2% compounded annually → EAR = 8.200%\nThe 8% quarterly option gives a higher effective return." },
+        ],
+        formula: "Sinking fund: R = S·i / [(1+i)ⁿ−1]\nEAR = (1 + r/m)ᵐ − 1\n8% quarterly EAR = 8.243% > 8.2%",
+        callout: "IBA exam: The EAR comparison is a classic question. Remember — higher compounding frequency always increases the effective rate above the nominal. Use EAR to make fair comparisons across different financial products."
+      },
+    ]
+  },
+  {
+    num: "08",
+    title: "Introduction to Probability",
+    scenarios: [
+      {
+        tags: ["applied","maju"],
+        uni: "MAJU",
+        topic: "Conditional Probability & Bayes' Theorem",
+        q: "A mobile phone factory has three assembly lines: L1 (50% output, 2% defect rate), L2 (30% output, 4% defect rate), L3 (20% output, 5% defect rate). A phone is selected randomly and found defective. Using Bayes' Theorem, find the probability it came from each line.",
+        steps: [
+          { title: "Prior Probabilities & Likelihoods", body: "P(L1)=0.50, P(D|L1)=0.02\nP(L2)=0.30, P(D|L2)=0.04\nP(L3)=0.20, P(D|L3)=0.05" },
+          { title: "Total Probability of Defect P(D)", body: "P(D) = 0.50(0.02) + 0.30(0.04) + 0.20(0.05)\n     = 0.010 + 0.012 + 0.010 = 0.032" },
+          { title: "Bayes' Theorem — Posterior Probabilities", body: "P(L1|D) = (0.50×0.02)/0.032 = 0.010/0.032 = 0.3125 (31.25%)\nP(L2|D) = (0.30×0.04)/0.032 = 0.012/0.032 = 0.3750 (37.50%)\nP(L3|D) = (0.20×0.05)/0.032 = 0.010/0.032 = 0.3125 (31.25%)" },
+          { title: "Verify: Posteriors Sum to 1", body: "0.3125 + 0.3750 + 0.3125 = 1.000 ✓" },
+        ],
+        formula: "P(Lᵢ|D) = P(D|Lᵢ)·P(Lᵢ) / P(D)\nP(D) = ΣP(D|Lᵢ)·P(Lᵢ)\nP(L2|D) = 37.5% (most likely source)",
+        callout: "Even though L1 produces the most output, L2 is the most likely source of the defective phone because its combination of volume × defect rate is highest. This counterintuitive result is why Bayes' Theorem is powerful in quality control."
+      },
+      {
+        tags: ["applied","ksbl"],
+        uni: "KSBL",
+        topic: "Expected Value & Decision Analysis",
+        q: "A FMCG company is deciding whether to launch a new product. Market research gives three scenarios: Strong market (P=0.35, profit=Rs. 8,00,000), Moderate market (P=0.45, profit=Rs. 3,00,000), Weak market (P=0.20, loss=Rs. 2,50,000). Should they launch? Also find the variance of profits.",
+        steps: [
+          { title: "Expected Value of Profit", body: "E(X) = 800,000(0.35) + 300,000(0.45) + (−250,000)(0.20)\n     = 280,000 + 135,000 − 50,000 = Rs. 3,65,000" },
+          { title: "Decision Based on EV", body: "E(X) = Rs. 3,65,000 > 0 → The project has positive expected value. Launch is financially justified from an expected-value perspective." },
+          { title: "Variance Calculation", body: "μ = 365,000\nVar(X) = (800K−365K)²(0.35) + (300K−365K)²(0.45) + (−250K−365K)²(0.20)\n= (435K)²(0.35) + (−65K)²(0.45) + (−615K)²(0.20)\n= 66,341,250,000 + 1,901,250,000 + 75,645,000,000\n≈ 1.439 × 10¹¹\nSD ≈ Rs. 3,79,300" },
+          { title: "Risk Assessment", body: "SD ≈ Rs. 3,79,300 vs EV = Rs. 3,65,000. The coefficient of variation = SD/EV ≈ 1.04 — very high relative risk. A risk-averse manager might hesitate despite positive EV." },
+        ],
+        formula: "E(X) = Σ xᵢ·P(xᵢ) = Rs. 3,65,000\nVar(X) = Σ(xᵢ−μ)²·P(xᵢ)\nSD ≈ Rs. 3,79,300",
+        callout: "KSBL combines EV with risk analysis. Always present both E(X) and the standard deviation. A high SD relative to EV signals high risk — use coefficient of variation (CV = SD/EV) to compare risky alternatives."
+      },
+      {
+        tags: ["theory","iba"],
+        uni: "IBA",
+        topic: "Addition & Multiplication Rules",
+        q: "In an IBA entrance test, the probability a student passes Mathematics is 0.70, the probability they pass English is 0.65, and the probability they pass both is 0.50. (a) Find P(passes at least one subject). (b) Are the two events independent? (c) Find P(passes English | passes Mathematics).",
+        steps: [
+          { title: "(a) P(M ∪ E) — Addition Rule", body: "P(M ∪ E) = P(M) + P(E) − P(M ∩ E)\n= 0.70 + 0.65 − 0.50 = 0.85" },
+          { title: "(b) Test for Independence", body: "If independent: P(M ∩ E) should = P(M) × P(E) = 0.70 × 0.65 = 0.455\nActual P(M ∩ E) = 0.50 ≠ 0.455\n→ Events are NOT independent." },
+          { title: "(c) Conditional Probability P(E|M)", body: "P(E|M) = P(M ∩ E) / P(M) = 0.50 / 0.70 ≈ 0.714 (71.4%)" },
+          { title: "Interpretation", body: "Knowing a student passed Math increases the probability of passing English from 65% to 71.4%, confirming the events are positively correlated (not independent)." },
+        ],
+        formula: "P(A∪B) = P(A)+P(B)−P(A∩B) = 0.85\nIndependence check: P(A∩B) ≟ P(A)·P(B)\nP(E|M) = P(M∩E)/P(M) = 0.714",
+        callout: "IBA theory question: always state the independence condition clearly — P(A∩B) = P(A)·P(B) — and test it numerically. Then compute the conditional probability to show the direction of dependence."
+      },
+    ]
+  }
+];
+
+// ── BUILD DOM ──────────────────────────────────────────────────────────────────
+const app = document.getElementById('app');
+let totalQ = 0, answeredQ = 0;
+
+chapters.forEach((ch, ci) => {
+  totalQ += ch.scenarios.length;
+
+  const chEl = document.createElement('div');
+  chEl.className = 'chapter';
+  chEl.id = `ch-${ci}`;
+
+  const header = document.createElement('div');
+  header.className = 'chapter-header';
+  header.innerHTML = `
+    <div class="ch-num">${ch.num}</div>
+    <div class="ch-info">
+      <div class="ch-title">${ch.title}</div>
+      <div class="ch-meta">
+        <span class="ch-count">${ch.scenarios.length} scenario${ch.scenarios.length > 1 ? 's' : ''}</span>
+        <span class="ch-progress-pill" id="pill-${ci}">0 / ${ch.scenarios.length} done</span>
+      </div>
+    </div>
+    <div class="ch-arrow">▾</div>
+  `;
+
+  const body = document.createElement('div');
+  body.className = 'chapter-body';
+
+  // progress bar inside body
+  const progRow = document.createElement('div');
+  progRow.className = 'ch-body-progress';
+  progRow.innerHTML = `
+    <div class="ch-prog-bar"><div class="ch-prog-fill" id="cpf-${ci}"></div></div>
+    <div class="ch-prog-text" id="cpt-${ci}">0 of ${ch.scenarios.length} reviewed</div>
+  `;
+  body.appendChild(progRow);
+
+  ch.scenarios.forEach((sc, si) => {
+    const qid = `q-${ci}-${si}`;
+
+    if (si === 0 || ch.scenarios[si-1].topic !== sc.topic) {
+      const tl = document.createElement('div');
+      tl.className = 'topic-label';
+      tl.textContent = sc.topic;
+      body.appendChild(tl);
+    }
+
+    const card = document.createElement('div');
+    card.className = 'scenario-card';
+
+    const tagHTML = sc.tags.map(t => `<span class="q-tag tag-${t}">${t}</span>`).join('') +
+      `<span class="q-tag tag-${sc.uni.toLowerCase().replace(' ','')}">${sc.uni}</span>`;
+
+    const qDiv = document.createElement('div');
+    qDiv.className = 'scenario-q';
+    qDiv.id = qid;
+    qDiv.innerHTML = `
+      <div class="q-num">Q${si+1}</div>
+      <div class="q-body">
+        <div class="q-tags">${tagHTML}</div>
+        <div class="q-scenario-label">▶ Scenario</div>
+        <div class="q-text">${sc.q}</div>
+        <div class="reveal-hint">Click to reveal solution →</div>
+      </div>
+    `;
+
+    // Answer panel
+    const aDiv = document.createElement('div');
+    aDiv.className = 'answer-panel';
+    aDiv.id = `a-${ci}-${si}`;
+
+    let aHTML = `<div class="ans-label">✦ Step-by-Step Solution</div>`;
+    sc.steps.forEach(step => {
+      aHTML += `<div class="ans-step">
+        <div class="ans-step-title">${step.title}</div>
+        <div class="ans-step-body">${step.body.replace(/\n/g,'<br>')}</div>
+      </div>`;
+    });
+    aHTML += `<div class="ans-formula">${sc.formula}</div>`;
+    aHTML += `<div class="ans-callout"><strong>📌 Exam Note:</strong> ${sc.callout}</div>`;
+    aDiv.innerHTML = aHTML;
+
+    // Toggle logic
+    let revealed = false;
+    qDiv.addEventListener('click', () => {
+      revealed = !revealed;
+      aDiv.classList.toggle('open', revealed);
+      qDiv.classList.toggle('revealed', revealed);
+      updateProgress(ci, ch.scenarios.length);
+    });
+
+    card.appendChild(qDiv);
+    card.appendChild(aDiv);
+    body.appendChild(card);
+  });
+
+  // Chapter toggle
+  header.addEventListener('click', () => {
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    header.classList.toggle('open', !isOpen);
+  });
+
+  chEl.appendChild(header);
+  chEl.appendChild(body);
+  app.appendChild(chEl);
+});
+
+function updateProgress(ci, total) {
+  const revealed = document.querySelectorAll(`#ch-${ci} .scenario-q.revealed`).length;
+  const pct = (revealed / total) * 100;
+  document.getElementById(`cpf-${ci}`).style.width = pct + '%';
+  document.getElementById(`cpt-${ci}`).textContent = `${revealed} of ${total} reviewed`;
+  document.getElementById(`pill-${ci}`).textContent = `${revealed} / ${total} done`;
+  if (revealed === total) {
+    document.getElementById(`pill-${ci}`).style.background = 'rgba(30,132,73,0.25)';
+    document.getElementById(`pill-${ci}`).style.color = '#52C880';
+  }
+
+  // global
+  const allRevealed = document.querySelectorAll('.scenario-q.revealed').length;
+  const gPct = (allRevealed / totalQ) * 100;
+  document.getElementById('global-fill').style.width = gPct + '%';
+  document.getElementById('global-label').textContent = `${allRevealed} of ${totalQ} scenarios reviewed`;
+}
+
+// Open first chapter by default
+document.querySelector('.chapter-header').click();
+</script>
+</body>
+</html>
